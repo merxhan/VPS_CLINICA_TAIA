@@ -56,6 +56,7 @@ cd project && docker compose up -d --build
 ```
 
 **Entorno de Producción:**
+El entorno de producción utiliza variables de entorno para configurar dinámicamente los dominios del sistema mediante Traefik.
 ```bash
 # Desde la raíz del proyecto
 docker compose -f project/compose.prod.yml up -d --build
@@ -63,6 +64,20 @@ docker compose -f project/compose.prod.yml up -d --build
 # O ingresando al directorio del proyecto
 cd project && docker compose -f compose.prod.yml up -d --build
 ```
+
+**Configuración Dinámica de Dominios:**
+Defina las siguientes variables en su archivo `.env` o en el entorno de despliegue para configurar las rutas:
+```ini
+DOMAIN_NAME=clinicataia.com
+SUBDOMAIN=portal
+```
+
+Con la configuración anterior, Traefik resolverá:
+* **Frontend:** `https://portal.clinicataia.com`
+* **Backend (API):** `https://api.portal.clinicataia.com`
+
+*Nota: Si la variable `SUBDOMAIN` no se define en el entorno, se utilizará `app` por defecto, resultando en `https://app.clinicataia.com` y `https://api.app.clinicataia.com`.*
+
 
 ### Gestión de Dependencias
 Para procesos de validación local o herramientas de IDE, ejecutar independientemente:
