@@ -6,12 +6,12 @@ services:
     container_name: taia_db
     restart: unless-stopped
     environment:
-      POSTGRES_USER: ${DB_USER:-postgres}
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
-      POSTGRES_DB: ${DB_NAME:-taia_db}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
       TZ: America/Sao_Paulo
     ports:
-      - "5432:5432"
+      - "3001:5432"
     volumes:
       - taia_pgdata:/var/lib/postgresql/data
     networks:
@@ -41,12 +41,10 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy_network"
-      # Router
       - "traefik.http.routers.taia-backend.rule=Host(`api.${SUBDOMAIN:-app}.${DOMAIN_NAME}`)"
       - "traefik.http.routers.taia-backend.tls=true"
       - "traefik.http.routers.taia-backend.entrypoints=websecure"
       - "traefik.http.routers.taia-backend.tls.certresolver=${CERT_RESOLVER}"
-      # Service port
       - "traefik.http.services.taia-backend.loadbalancer.server.port=3000"
     healthcheck:
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/health"]
@@ -74,12 +72,10 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy_network"
-      # Router
       - "traefik.http.routers.taia-frontend.rule=Host(`${SUBDOMAIN:-app}.${DOMAIN_NAME}`)"
       - "traefik.http.routers.taia-frontend.tls=true"
       - "traefik.http.routers.taia-frontend.entrypoints=websecure"
       - "traefik.http.routers.taia-frontend.tls.certresolver=${CERT_RESOLVER}"
-      # Service port
       - "traefik.http.services.taia-frontend.loadbalancer.server.port=80"
     healthcheck:
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:80/"]
