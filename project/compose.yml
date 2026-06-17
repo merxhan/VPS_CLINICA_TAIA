@@ -1,0 +1,57 @@
+name: taia
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: taia_db
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_DB: ${DB_NAME:-taia_db}
+      TZ: America/Sao_Paulo
+    ports:
+      - "5432:5432"
+    volumes:
+      - taia_pgdata:/var/lib/postgresql/data
+    networks:
+      - taia_network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: taia_backend
+    restart: always
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: ${DB_USER:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD:-postgres}
+      DB_NAME: ${DB_NAME:-taia_db}
+      TZ: America/Sao_Paulo
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    networks:
+      - taia_network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: taia_frontend
+    restart: always
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+    networks:
+      - taia_network
+
+volumes:
+  taia_pgdata:
+
+networks:
+  taia_network:
+    driver: bridge

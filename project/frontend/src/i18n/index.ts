@@ -1,0 +1,380 @@
+import { createI18n } from 'vue-i18n';
+
+const messages = {
+  pt: {
+    // General
+    save: 'Salvar',
+    cancel: 'Cancelar',
+    delete: 'Excluir',
+    edit: 'Editar',
+    actions: 'Ações',
+    status: 'Status',
+    search: 'Pesquisar...',
+    yes: 'Sim',
+    no: 'Não',
+    
+    // Auth & Landing
+    login_title: 'Acesso ao Sistema',
+    login_cpf: 'Número de CPF',
+    login_dob: 'Data de Nascimento (Senha)',
+    login_button: 'Entrar no Sistema',
+    login_error: 'Credenciais inválidas',
+    login_subtitle: 'Gestão Clínica e Financeira',
+    login_success: 'Autenticação realizada com sucesso',
+    
+    // Sidebar
+    nav_dashboard: 'Painel',
+    nav_patients: 'Pacientes',
+    nav_services: 'Serviços',
+    nav_categories: 'Categorias',
+    nav_logout: 'Desconectar',
+
+    // Header & Greetings
+    welcome: 'Bem-vindo(a)',
+    role_admin: 'Administrador',
+    role_paciente: 'Paciente',
+    greeting_morning: 'Bom dia',
+    greeting_afternoon: 'Boa tarde',
+    greeting_evening: 'Boa noite',
+
+    // Dashboard
+    dash_active_patients: 'Pacientes Ativos',
+    dash_total_services: 'Total de Serviços',
+    dash_pending_sessions: 'Sessões Pendentes',
+    dash_monthly_income: 'Receita Mensal',
+    dash_recent_activity: 'Atividade Recente',
+    dash_no_activity: 'Nenhuma atividade recente encontrada.',
+    dash_view_all: 'Ver todos',
+
+    // Pacientes List
+    patients_title: 'Gestão de Pacientes',
+    patients_new: 'Novo Paciente',
+    patients_name: 'Nome Completo',
+    patients_cpf: 'CPF',
+    patients_profession: 'Profissão',
+    patients_phone: 'Telefone',
+    patients_dob: 'Data Nasc.',
+    patients_not_found: 'Nenhum paciente cadastrado.',
+    patients_modal_title: 'Cadastrar Novo Paciente',
+    patients_modal_edit: 'Editar Paciente',
+    patients_delete_confirm: 'Tem certeza que deseja excluir este paciente?',
+    
+    // Paciente View (Ficha Clínica)
+    ficha_title: 'Ficha Clínica do Paciente',
+    ficha_new_diag: 'Novo Diagnóstico',
+    ficha_no_diag: 'Este paciente não possui diagnósticos registrados.',
+    ficha_diag_history: 'Histórico de Diagnósticos',
+    ficha_diag_service: 'Serviço',
+    ficha_diag_date: 'Data',
+    ficha_diag_desc: 'Descrição Clínica',
+    ficha_diag_no_desc: 'Sem descrição detalhada.',
+    ficha_sessions: 'Sessões Associadas',
+    ficha_sessions_none: 'Não há sessões para este diagnóstico.',
+    ficha_sess_num: 'Número',
+    ficha_sess_date: 'Data e Hora',
+    ficha_sess_value: 'Valor (R$)',
+    ficha_sess_payment: 'Meio de Pagamento',
+    ficha_sess_state: 'Estado',
+    
+    // Modals
+    diag_modal_title: 'Criar Novo Diagnóstico e Plano de Sessões',
+    diag_modal_edit: 'Editar Diagnóstico e Plano de Sessões',
+    diag_select_service: 'Selecione um serviço',
+    diag_date_label: 'Data do Diagnóstico *',
+    diag_desc_label: 'Descrição / Notas Clínicas',
+    diag_plan_title: 'Plano de Sessões',
+    diag_add_session: '+ Adicionar Sessão',
+    diag_empty_sessions: 'Adicione sessões a este diagnóstico se necessário.',
+    diag_save: 'Salvar Diagnóstico',
+    diag_saving: 'Salvando...',
+    diag_delete_title: 'Excluir Diagnóstico',
+    diag_delete_desc: 'Tem certeza que deseja excluir este diagnóstico? Se houver sessões pagas ou realizadas, não poderá ser excluído. Esta ação não pode ser desfeita.',
+    
+    // Servicios
+    services_title: 'Gestão de Serviços',
+    services_new: 'Novo Serviço',
+    services_name: 'Nome do Serviço',
+    services_code: 'Código',
+    services_base_price: 'Preço Base (R$)',
+    services_active: 'Ativo',
+    services_inactive: 'Inativo',
+    services_not_found: 'Nenhum serviço cadastrado.',
+    services_modal_title: 'Novo Serviço',
+    services_modal_edit: 'Editar Serviço',
+    
+    // Categorias
+    cat_new: 'Nova Categoria',
+    cat_not_found: 'Nenhuma categoria encontrada.',
+    cat_modal_title: 'Nova Categoria',
+    cat_modal_edit: 'Editar Categoria',
+    
+    // Toasts
+    toast_error_load: 'Erro ao carregar dados',
+    toast_error_network: 'Erro de rede',
+    toast_error_server: 'Erro do servidor',
+    toast_error_required: 'Preencha todos os campos obrigatórios',
+    toast_error_cpf_format: 'Formato de CPF inválido. Deve ter 11 dígitos.',
+    toast_error_dob_future: 'A data de nascimento deve ser anterior a hoje.',
+    toast_error_phone_format: 'Formato de telefone inválido.',
+    toast_success_updated: 'Atualizado com sucesso',
+    toast_error_update: 'Erro ao atualizar',
+    toast_success_created: 'Criado com sucesso',
+    toast_error_create: 'Erro ao criar',
+    toast_success_deleted: 'Excluído com sucesso',
+    toast_error_delete: 'Erro ao excluir',
+    toast_error_diag_required: 'Por favor selecione um serviço e uma data',
+  },
+  es: {
+    // General
+    save: 'Guardar',
+    cancel: 'Cancelar',
+    delete: 'Eliminar',
+    edit: 'Editar',
+    actions: 'Acciones',
+    status: 'Estado',
+    search: 'Buscar...',
+    yes: 'Sí',
+    no: 'No',
+    
+    // Auth & Landing
+    login_title: 'Acceso al Sistema',
+    login_cpf: 'Número de CPF',
+    login_dob: 'Fecha de Nacimiento (Contraseña)',
+    login_button: 'Ingresar al Sistema',
+    login_error: 'Credenciales inválidas',
+    login_subtitle: 'Gestión Clínica y Financiera',
+    login_success: 'Autenticación realizada con éxito',
+    
+    // Sidebar
+    nav_dashboard: 'Dashboard',
+    nav_patients: 'Pacientes',
+    nav_services: 'Servicios',
+    nav_categories: 'Categorías',
+    nav_logout: 'Desconectar',
+
+    // Header & Greetings
+    welcome: 'Bienvenido(a)',
+    role_admin: 'Administrador',
+    role_paciente: 'Paciente',
+    greeting_morning: 'Buenos días',
+    greeting_afternoon: 'Buenas tardes',
+    greeting_evening: 'Buenas noches',
+
+    // Dashboard
+    dash_active_patients: 'Pacientes Activos',
+    dash_total_services: 'Total Servicios',
+    dash_pending_sessions: 'Sesiones Pendientes',
+    dash_monthly_income: 'Ingresos Mensales',
+    dash_recent_activity: 'Actividad Reciente',
+    dash_no_activity: 'No hay actividad reciente.',
+    dash_view_all: 'Ver todos',
+
+    // Pacientes List
+    patients_title: 'Gestión de Pacientes',
+    patients_new: 'Nuevo Paciente',
+    patients_name: 'Nombre Completo',
+    patients_cpf: 'CPF',
+    patients_profession: 'Profesión',
+    patients_phone: 'Teléfono',
+    patients_dob: 'Fecha Nac.',
+    patients_not_found: 'No hay pacientes registrados.',
+    patients_modal_title: 'Registrar Nuevo Paciente',
+    patients_modal_edit: 'Editar Paciente',
+    patients_delete_confirm: '¿Está seguro de eliminar este paciente?',
+
+    // Paciente View
+    ficha_title: 'Ficha Clínica del Paciente',
+    ficha_new_diag: 'Nuevo Diagnóstico',
+    ficha_no_diag: 'Este paciente no tiene diagnósticos registrados.',
+    ficha_diag_history: 'Historial Diagnóstico',
+    ficha_diag_service: 'Servicio',
+    ficha_diag_date: 'Fecha',
+    ficha_diag_desc: 'Descripción Clínica',
+    ficha_diag_no_desc: 'Sin descripción detallada.',
+    ficha_sessions: 'Sesiones Asociadas',
+    ficha_sessions_none: 'No hay sesiones para este diagnóstico.',
+    ficha_sess_num: 'Número',
+    ficha_sess_date: 'Fecha y Hora',
+    ficha_sess_value: 'Valor (R$)',
+    ficha_sess_payment: 'Medio Pago',
+    ficha_sess_state: 'Estado',
+    
+    // Modals
+    diag_modal_title: 'Crear Nuevo Diagnóstico y Plan de Sesiones',
+    diag_modal_edit: 'Editar Diagnóstico y Plan de Sesiones',
+    diag_select_service: 'Seleccione un servicio',
+    diag_date_label: 'Fecha del Diagnóstico *',
+    diag_desc_label: 'Descripción / Notas Clínicas',
+    diag_plan_title: 'Plan de Sesiones',
+    diag_add_session: '+ Agregar Sesión',
+    diag_empty_sessions: 'Agregue sesiones a este diagnóstico si corresponde.',
+    diag_save: 'Guardar Diagnóstico',
+    diag_saving: 'Guardando...',
+    diag_delete_title: 'Eliminar Diagnóstico',
+    diag_delete_desc: '¿Está seguro de eliminar este diagnóstico? Si tiene sesiones pagadas o realizadas no se podrá eliminar. Esta acción no se puede deshacer.',
+
+    // Servicios
+    services_title: 'Gestión de Servicios',
+    services_new: 'Nuevo Servicio',
+    services_name: 'Nombre del Servicio',
+    services_code: 'Código',
+    services_base_price: 'Precio Base (R$)',
+    services_active: 'Activo',
+    services_inactive: 'Inactivo',
+    services_not_found: 'No hay servicios registrados.',
+    services_modal_title: 'Nuevo Servicio',
+    services_modal_edit: 'Editar Servicio',
+    
+    // Categorias
+    cat_new: 'Nueva Categoría',
+    cat_not_found: 'No hay categorías registradas.',
+    cat_modal_title: 'Nueva Categoría',
+    cat_modal_edit: 'Editar Categoría',
+    
+    // Toasts
+    toast_error_load: 'Error al cargar datos',
+    toast_error_network: 'Error de red',
+    toast_error_server: 'Error del servidor',
+    toast_error_required: 'Complete todos los campos obligatorios',
+    toast_error_cpf_format: 'Formato de CPF inválido. Debe contener 11 dígitos.',
+    toast_error_dob_future: 'La fecha de nacimiento debe ser menor a hoy.',
+    toast_error_phone_format: 'Formato de teléfono inválido.',
+    toast_success_updated: 'Actualizado exitosamente',
+    toast_error_update: 'Error al actualizar',
+    toast_success_created: 'Creado exitosamente',
+    toast_error_create: 'Error al crear',
+    toast_success_deleted: 'Eliminado exitosamente',
+    toast_error_delete: 'Error al eliminar',
+    toast_error_diag_required: 'Por favor seleccione un servicio y una fecha',
+  },
+  en: {
+    // General
+    save: 'Save',
+    cancel: 'Cancel',
+    delete: 'Delete',
+    edit: 'Edit',
+    actions: 'Actions',
+    status: 'Status',
+    search: 'Search...',
+    yes: 'Yes',
+    no: 'No',
+    
+    // Auth & Landing
+    login_title: 'System Access',
+    login_cpf: 'CPF Number',
+    login_dob: 'Date of Birth (Password)',
+    login_button: 'Login',
+    login_error: 'Invalid credentials',
+    login_subtitle: 'Clinical and Financial Management',
+    login_success: 'Authentication successful',
+    
+    // Sidebar
+    nav_dashboard: 'Dashboard',
+    nav_patients: 'Patients',
+    nav_services: 'Services',
+    nav_categories: 'Categories',
+    nav_logout: 'Logout',
+
+    // Header & Greetings
+    welcome: 'Welcome',
+    role_admin: 'Administrator',
+    role_paciente: 'Patient',
+    greeting_morning: 'Good morning',
+    greeting_afternoon: 'Good afternoon',
+    greeting_evening: 'Good evening',
+
+    // Dashboard
+    dash_active_patients: 'Active Patients',
+    dash_total_services: 'Total Services',
+    dash_pending_sessions: 'Pending Sessions',
+    dash_monthly_income: 'Monthly Income',
+    dash_recent_activity: 'Recent Activity',
+    dash_no_activity: 'No recent activity found.',
+    dash_view_all: 'View all',
+
+    // Pacientes List
+    patients_title: 'Patients Management',
+    patients_new: 'New Patient',
+    patients_name: 'Full Name',
+    patients_cpf: 'CPF',
+    patients_profession: 'Profession',
+    patients_phone: 'Phone',
+    patients_dob: 'Birth Date',
+    patients_not_found: 'No patients found.',
+    patients_modal_title: 'Register New Patient',
+    patients_modal_edit: 'Edit Patient',
+    patients_delete_confirm: 'Are you sure you want to delete this patient?',
+
+    // Paciente View
+    ficha_title: 'Patient Clinical Record',
+    ficha_new_diag: 'New Diagnosis',
+    ficha_no_diag: 'This patient has no registered diagnoses.',
+    ficha_diag_history: 'Diagnosis History',
+    ficha_diag_service: 'Service',
+    ficha_diag_date: 'Date',
+    ficha_diag_desc: 'Clinical Description',
+    ficha_diag_no_desc: 'No detailed description.',
+    ficha_sessions: 'Associated Sessions',
+    ficha_sessions_none: 'No sessions for this diagnosis.',
+    ficha_sess_num: 'Number',
+    ficha_sess_date: 'Date & Time',
+    ficha_sess_value: 'Value (R$)',
+    ficha_sess_payment: 'Payment Method',
+    ficha_sess_state: 'State',
+    
+    // Modals
+    diag_modal_title: 'Create New Diagnosis & Sessions Plan',
+    diag_modal_edit: 'Edit Diagnosis & Sessions Plan',
+    diag_select_service: 'Select a service',
+    diag_date_label: 'Diagnosis Date *',
+    diag_desc_label: 'Description / Clinical Notes',
+    diag_plan_title: 'Sessions Plan',
+    diag_add_session: '+ Add Session',
+    diag_empty_sessions: 'Add sessions to this diagnosis if applicable.',
+    diag_save: 'Save Diagnosis',
+    diag_saving: 'Saving...',
+    diag_delete_title: 'Delete Diagnosis',
+    diag_delete_desc: 'Are you sure you want to delete this diagnosis? If it has paid or completed sessions, it cannot be deleted. This action cannot be undone.',
+
+    // Servicios
+    services_title: 'Services Management',
+    services_new: 'New Service',
+    services_name: 'Service Name',
+    services_code: 'Code',
+    services_base_price: 'Base Price (R$)',
+    services_active: 'Active',
+    services_inactive: 'Inactive',
+    services_not_found: 'No services found.',
+    services_modal_title: 'New Service',
+    services_modal_edit: 'Edit Service',
+    
+    // Categorias
+    cat_new: 'New Category',
+    cat_not_found: 'No categories found.',
+    cat_modal_title: 'New Category',
+    cat_modal_edit: 'Edit Category',
+    
+    // Toasts
+    toast_error_load: 'Error loading data',
+    toast_error_network: 'Network error',
+    toast_error_server: 'Server error',
+    toast_error_required: 'Please fill in all required fields',
+    toast_error_cpf_format: 'Invalid CPF format. Must contain 11 digits.',
+    toast_error_dob_future: 'Date of birth must be before today.',
+    toast_error_phone_format: 'Invalid phone format.',
+    toast_success_updated: 'Updated successfully',
+    toast_error_update: 'Error updating',
+    toast_success_created: 'Created successfully',
+    toast_error_create: 'Error creating',
+    toast_success_deleted: 'Deleted successfully',
+    toast_error_delete: 'Error deleting',
+    toast_error_diag_required: 'Please select a service and a date',
+  }
+};
+
+export const i18n = createI18n({
+  locale: 'pt',
+  fallbackLocale: 'es',
+  messages,
+  legacy: false, // use Composition API
+});
