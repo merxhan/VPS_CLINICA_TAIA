@@ -27,6 +27,7 @@ pnpm-debug.log*
 node_modules/
 jspm_packages/
 web_modules/
+dist/
 
 # ==========================================
 # Variables de Entorno y Secretos (Crítico)
@@ -40,18 +41,12 @@ web_modules/
 # ==========================================
 # Frontend (Vue 3 / Vite)
 # ==========================================
-frontend/dist/
-frontend/local/
-frontend/.nuxt/
-frontend/.output/
+#project/frontend/dist
 
 # ==========================================
 # Backend (NestJS / TypeORM)
 # ==========================================
-backend/dist/
-backend/out/
-backend/artifacts/
-backend/db/
+#project/backend/dist
 
 # ==========================================
 # Persistencia y Datos Locales (Docker)
