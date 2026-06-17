@@ -1,0 +1,98 @@
+name: taia
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: taia_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_DB: ${DB_NAME:-taia_db}
+      TZ: America/Sao_Paulo
+    ports:
+      - "5432:5432"
+    volumes:
+      - taia_pgdata:/var/lib/postgresql/data
+    networks:
+      - taia_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$DB_USER -d $$DB_PASSWORD"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: taia_backend
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      DB_HOST: db
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - taia_network
+      - proxy_network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy_network"
+      # Router
+      - "traefik.http.routers.taia-backend.rule=Host(`api.${DOMAIN_NAME}`)"
+      - "traefik.http.routers.taia-backend.tls=true"
+      - "traefik.http.routers.taia-backend.entrypoints=websecure"
+      - "traefik.http.routers.taia-backend.tls.certresolver=${CERT_RESOLVER}"
+      # Service port
+      - "traefik.http.services.taia-backend.loadbalancer.server.port=3000"
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: https://api.${DOMAIN_NAME}
+    container_name: taia_frontend
+    restart: unless-stopped
+    ports:
+      - "8081:80"
+    depends_on:
+      backend:
+        condition: service_started
+    networks:
+      - taia_network
+      - proxy_network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy_network"
+      # Router
+      - "traefik.http.routers.taia-frontend.rule=Host(`app.${DOMAIN_NAME}`)"
+      - "traefik.http.routers.taia-frontend.tls=true"
+      - "traefik.http.routers.taia-frontend.entrypoints=websecure"
+      - "traefik.http.routers.taia-frontend.tls.certresolver=${CERT_RESOLVER}"
+      # Service port
+      - "traefik.http.services.taia-frontend.loadbalancer.server.port=80"
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:80/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  taia_pgdata:
+
+networks:
+  taia_network:
+    driver: bridge
+  proxy_network:
+    external: true
