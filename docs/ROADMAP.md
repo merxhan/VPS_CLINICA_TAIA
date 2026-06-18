@@ -2,7 +2,7 @@
 
 El agente de codificación marcará secuencialmente las tareas completadas modificando el estado a `- [x]` a medida que avance con éxito en el espacio de trabajo.
 
-**Status:** Completed (19/19 tareas activas completadas)
+**Status:** En Progreso (Nuevas tareas de QA, Seguridad y Arquitectura añadidas)
 **Current Sprint:** Sprint 1: Foundation, Infrastructure & Core Domain
 
 ## Filosofía de Construcción (Build Philosophy)
@@ -80,10 +80,10 @@ El agente de codificación marcará secuencialmente las tareas completadas modif
 * **Files:** `project/backend/src/app.module.ts`, `project/frontend/src/main.ts`
 * **Notes:** Establecer la estructura modular limpia del Backend (NestJS/Express) y Frontend (Vue 3/Vite/TS) respetando estrictamente los principios SOLID y Clean Architecture.
 * **Verify:** Compilar ambos proyectos de forma independiente y certificar que no existan errores de tipado o dependencias circulares en las consolas de desarrollo.
-* [x] **TASK-013** — Módulo de Autenticación por CPF y Fecha de Nacimiento
-* **Files:** `project/backend/src/auth/auth.service.ts`, `project/backend/src/auth/auth.controller.ts`, `project/frontend/src/views/Login.vue`
-* **Notes:** Programación del flujo de acceso validando el campo CPF como usuario y la fecha de nacimiento (`fecha_nacimiento`) como contraseña. Implementar la validación inmediata del formulario.
-* **Verify:** Enviar peticiones válidas e inválidas al endpoint de autenticación, comprobando que ante un fallo el backend responda con HTTP 401 y el frontend pinte un Toast crítico de error sin recargar la pantalla.
+* [ ] **TASK-013** — Módulo de Autenticación Segura (JWT)
+* **Files:** `project/backend/src/auth/auth.service.ts`, `project/backend/src/auth/jwt-auth.guard.ts`, `project/frontend/src/views/Login.vue`
+* **Notes:** Programación del flujo de acceso validando el campo CPF como usuario y fecha de nacimiento (`fecha_nacimiento`) como contraseña inicial. Implementar la generación y retorno de un JSON Web Token (JWT) firmado, requiriendo este token vía `JwtAuthGuard` para todas las rutas protegidas.
+* **Verify:** Enviar peticiones válidas al endpoint de autenticación, extraer el JWT y certificar que una petición HTTP posterior a un endpoint protegido (ej. GET /pacientes) con el token en la cabecera retorne 200 OK.
 * [x] **TASK-014** — Desarrollo de API REST para CRUDs Core
 * **Files:** `project/backend/src/modules/servicios/servicios.controller.ts`, `project/backend/src/modules/pacientes/pacientes.controller.ts`
 * **Notes:** Construcción de endpoints lógicos y optimizados para resolver los CRUDs asociados a servicios y la gestión integrada de pacientes, con soporte nativo para paginación desde el servidor.
@@ -100,22 +100,30 @@ El agente de codificación marcará secuencialmente las tareas completadas modif
 * **Files:** `project/backend/src/common/interceptors/logging.interceptor.ts`, `project/backend/src/entities/Diagnosticos.entity.ts`
 * **Notes:** Desarrollar un interceptor global en el backend para enmascarar datos críticos como el `cpf` y campos financieros en los logs de salida de la aplicación. Asegurar que las descripciones clínicas de la tabla `Diagnosticos` no sean expuestas en texto plano dentro de los archivos de registro o consolas del sistema para cumplir con la Ley General de Protección de Datos (LGPD) de Brasil.
 * **Verify:** Realizar peticiones HTTP de creación de pacientes y diagnósticos, revisar la salida de texto en la consola de Docker y certificar que la información sensible aparezca oculta o cifrada.
+* [ ] **TASK-017.5** — Autodocumentación de la API (Swagger)
+* **Files:** `project/backend/src/main.ts`, `project/backend/src/modules/**/*.controller.ts`
+* **Notes:** Configurar `@nestjs/swagger` para exponer la especificación OpenAPI de los endpoints, DTOs y tipos de respuestas, garantizando un contrato técnico claro entre Frontend y Backend.
+* **Verify:** Iniciar el servidor local y acceder a `http://localhost:3000/api` comprobando la visualización correcta e interactiva de los endpoints del sistema.
+* [ ] **TASK-017.6** — Configuración de Estado Global Persistente (Pinia)
+* **Files:** `project/frontend/src/main.ts`, `project/frontend/src/store/auth.store.ts`, `project/frontend/src/store/ui.store.ts`
+* **Notes:** Integrar y estructurar Pinia como mecanismo para la gestión reactiva de la sesión del usuario (Guardado de Token JWT y perfil) y el estado visual de la UI (Modo oscuro y diccionario i18n seleccionado).
+* **Verify:** Autenticarse en el sistema, recargar la pestaña del navegador y validar que la sesión del usuario persista correctamente al extraer los datos desde localStorage a través de Pinia.
 
 ---
 
 ## 5. QA (Aseguramiento de Calidad)
 
-* [-] **TASK-018** — Pruebas Unitarias de Reglas de Negocio (Removido por requerimiento del usuario)
-* **Files:** N/A (Archivos eliminados)
-* **Notes:** Tarea de pruebas unitarias descartada. No se incluirán tests en el proyecto.
-* **Verify:** N/A
-* [-] **TASK-019** — Pruebas de Integración de Capa de Persistencia (Removido por requerimiento del usuario)
-* **Files:** N/A (Archivos eliminados)
-* **Notes:** Tarea de pruebas de integración descartada.
-* **Verify:** N/A
-* [-] **TASK-020** — Pruebas de Sistema Extremo a Extremo (E2E) (Removido por requerimiento del usuario)
-* **Files:** N/A (Archivos eliminados)
-* **Notes:** Tarea de pruebas de interfaz de usuario descartada.
+* [ ] **TASK-018** — Pruebas Unitarias de Rutas Críticas (Backend)
+* **Files:** `project/backend/src/modules/sesiones/sesiones.service.spec.ts`, `project/backend/src/common/validators/cpf.validator.spec.ts`
+* **Notes:** Reincorporación de QA para lógicas sensibles. Desarrollar test unitarios utilizando Jest nativo de NestJS para validar la estricta transición de estados de las sesiones (Pendiente -> Paga -> Realizada) y el algoritmo de verificación de CPF, evadiendo regresiones.
+* **Verify:** Ejecutar el comando `npm run test` dentro de `project/backend` y certificar el pase en verde (100% success) de las suites de validación crítica.
+* [ ] **TASK-019** — Pruebas Unitarias de Componentes Visuales (Frontend)
+* **Files:** `project/frontend/src/components/shared/ToastNotification.spec.ts`, `project/frontend/src/components/shared/BaseModal.spec.ts`
+* **Notes:** Configurar `Vitest` para el aseguramiento del comportamiento de los componentes compartidos (UI reactiva) verificando la correcta propagación de props, eventos (emits) y visibilidad de los estados modales.
+* **Verify:** Ejecutar `npm run test:unit` dentro de `project/frontend` y validar la renderización correcta sin errores en un entorno de jsdom.
+* [-] **TASK-020** — Pruebas de Sistema Extremo a Extremo (E2E) (Removido)
+* **Files:** N/A
+* **Notes:** Tarea E2E descartada temporalmente en favor de priorizar el QA Quirúrgico (Unitario).
 * **Verify:** N/A
 
 ---
@@ -130,3 +138,7 @@ El agente de codificación marcará secuencialmente las tareas completadas modif
 * **Files:** `project/compose.yml`
 * **Notes:** Configuración integral del archivo `compose.yml` declarando de forma unificada los servicios de Frontend, Backend y el motor PostgreSQL. Configurar redes internas aisladas, volúmenes con nombre para garantizar la persistencia de datos y variables de entorno iniciales. Excluir dependencias de pipelines de ejecución externos.
 * **Verify:** Ejecutar `docker compose up -d --build` en la raíz y validar que los tres contenedores levanten en estado activo, comunicándose internamente en la red aislada declarada.
+* [ ] **TASK-023** — Flujo de Validación Estática (CI/CD Pipeline Base)
+* **Files:** `project/backend/package.json`, `project/frontend/package.json`, `.github/workflows/main.yml` (o script bash local)
+* **Notes:** Implementar una barrera de integración continua (Linter, Prettier, TypeScript checker) que aborte el proceso de construcción de imágenes Docker (`docker build`) si se detecta alguna falla de tipos o de estilo.
+* **Verify:** Insertar intencionadamente un error de sintaxis en TypeScript, correr el flujo automatizado y verificar que se aborte la compilación con un código de salida `1`.
